@@ -24,7 +24,7 @@ const Header: React.FC<HeaderProps> = ({ user, onUserChange }) => {
   };
 
   return (
-    <div className="bg-gray-200 text-black py-2 px-5 flex flex-row justify-between items-center border-b-2 border-gray-400">
+    <div className="bg-gray-200 text-black py-2 px-5 flex flex-row justify-between items-center">
       <Typography variant="h4">Expense Tracker</Typography>
 
       {formSubmitted ? (

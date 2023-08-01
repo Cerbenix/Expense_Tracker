@@ -1,85 +1,53 @@
-import { Typography, Button, MenuItem, TextField } from '@mui/material';
-import React, { useState } from 'react';
+import { Typography, Button, MenuItem, TextField } from "@mui/material";
+import React, { useState } from "react";
 
 interface ExpenseFormProps {
   groups: Group[];
   selectedGroup: Group | null;
   onClose: () => void;
-  onSubmit: (expense: Expense, updatedGroup: Group) => void;
+  onSubmit: (expense: Expense) => void;
 }
 
-const ExpenseForm: React.FC<ExpenseFormProps> = ({ groups, selectedGroup, onClose, onSubmit }) => {
+const ExpenseForm: React.FC<ExpenseFormProps> = ({
+  groups,
+  selectedGroup,
+  onClose,
+  onSubmit,
+}) => {
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(
     selectedGroup ? selectedGroup.id : null
   );
   const [amount, setAmount] = useState<number>(0);
-  const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(
-    selectedGroup ? selectedGroup.members[0] : null
+  const [selectedParticipant, setSelectedParticipant] =
+    useState<Participant | null>(
+      selectedGroup ? selectedGroup.members[0] : null
+    );
+  const [date, setDate] = useState<string>(
+    new Date().toISOString().slice(0, 10)
   );
-  const [date, setDate] = useState<string>(new Date().toISOString().slice(0, 10));
-  const [description, setDescription] = useState<string>('');
+  const [description, setDescription] = useState<string>("");
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (selectedGroupId && selectedParticipant) {
-      const newExpense: Expense = {
-        id: `expense-${Date.now()}`,
-        description: description,
-        participants: [selectedParticipant],
-        amount: amount,
-        paidBy: selectedParticipant.name,
-        date: date,
-        settled: false,
-        expanded: false,
-      };
-  
       // Find the selected group based on selectedGroupId
-      const updatedGroup = groups.find((group) => group.id === selectedGroupId);
+      const selectedGroup = groups.find(
+        (group) => group.id === selectedGroupId
+      );
 
-      if (updatedGroup) {
-        // Calculate the changes in expensesOwed for each participant
-        const updatedParticipants = updatedGroup.members.map((participant) => {
-          if (participant.name === selectedParticipant.name) {
-            // The expense was paid by this participant, reduce the expensesOwed
-            return {
-              ...participant,
-              expensesOwed: [
-                ...participant.expensesOwed,
-                {
-                  id: `expense-${Date.now()}`,
-                  description: description,
-                  amount: -amount,
-                  paidBy: selectedParticipant.name,
-                  date: date,
-                },
-              ],
-            };
-          } else {
-            // The expense was not paid by this participant, update the expensesOwed with new expense
-            return {
-              ...participant,
-              expensesOwed: [
-                ...participant.expensesOwed,
-                {
-                  id: `expense-${Date.now()}`,
-                  description: description,
-                  amount: amount / (updatedGroup.members.length - 1),
-                  paidBy: selectedParticipant.name,
-                  date: date,
-                },
-              ],
-            };
-          }
-        });
-
-        // Update the selectedGroup with the updatedParticipants
-        const updatedGroupWithExpenses: Group = {
-          ...updatedGroup,
-          members: updatedParticipants,
+      if (selectedGroup) {
+        const newExpense: Expense = {
+          id: `expense-${Date.now()}`,
+          description: description,
+          participants: [...selectedGroup.members],
+          amount: amount,
+          paidBy: selectedParticipant.name,
+          date: date,
+          settled: false,
+          expanded: false,
         };
 
-        // Call the onSubmit prop with the new expense and the updated group
-        onSubmit(newExpense, updatedGroupWithExpenses);
+        onSubmit(newExpense);
       }
     }
   };
@@ -95,7 +63,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ groups, selectedGroup, onClos
           label="Select Group"
           variant="outlined"
           color="primary"
-          value={selectedGroupId || ''}
+          value={selectedGroupId || ""}
           onChange={(e) => setSelectedGroupId(e.target.value || null)}
           className="mt-2"
         >
@@ -123,10 +91,12 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ groups, selectedGroup, onClos
             label="Select Paid By"
             variant="outlined"
             color="primary"
-            value={selectedParticipant ? selectedParticipant.name : ''}
+            value={selectedParticipant ? selectedParticipant.name : ""}
             onChange={(e) =>
               setSelectedParticipant(
-                selectedGroup.members.find((member) => member.name === e.target.value) || null
+                selectedGroup.members.find(
+                  (member) => member.name === e.target.value
+                ) || null
               )
             }
             className="mt-2"
@@ -155,25 +125,24 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ groups, selectedGroup, onClos
           onChange={(e) => setDate(e.target.value)}
           className="mt-2"
         />
-        <div className='flex flex-row justify-between'>
-        <Button
-          variant="outlined"
-          color="primary"
-          type="submit"
-          className="my-2"
-        >
-          Submit
-        </Button>
-        <Button
-          variant="outlined"
-          color="error"
-          onClick={onClose}
-          className="my-2"
-        >
-          Cancel
-        </Button>
+        <div className="flex flex-row justify-between">
+          <Button
+            variant="outlined"
+            color="primary"
+            type="submit"
+            className="my-2"
+          >
+            Submit
+          </Button>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={onClose}
+            className="my-2"
+          >
+            Cancel
+          </Button>
         </div>
-       
       </form>
     </div>
   );

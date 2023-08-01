@@ -1,9 +1,9 @@
 type Group = {
-    id: string;
-    name: string;
-    members: Participant[];
-    expenses: Expense[];
-  };
+  id: string;
+  name: string;
+  members: Participant[];
+  expenses: Expense[];
+};
 
 interface Expense {
   id: string;
@@ -17,12 +17,13 @@ interface Expense {
 }
 
 type ExpenseOwed = {
-    expenseId: string;
-    amount: number;
-    settled: boolean;
-  };
-  
-  type Participant = {
-    name: string;
-    expensesOwed: ExpenseOwed[];
-  };
+  expenseId: string;
+  amount: number;
+  settled: boolean;
+};
+
+type Participant = {
+  name: string;
+  expensesOwed: ExpenseOwed[];
+};
+
