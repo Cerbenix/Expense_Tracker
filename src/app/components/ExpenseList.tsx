@@ -102,7 +102,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
                     {settledExpensesOwed.map((expenseOwed) => (
                       <span key={expenseOwed.expenseId}>
                         <MonetizationOnIcon /> {member.name} sent:{" "}
-                        {expenseOwed.amount}$
+                        {(expenseOwed.amount).toFixed(2)}$
                       </span>
                     ))}
                   </p>
