@@ -49,7 +49,7 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
           onChange={(e) => setGroupName(e.target.value)}
           required
         />
-        <div className="flex flex-col">
+        <div className="flex flex-col space-y-2 mt-2">
           {participants.map((participant, index) => (
             <TextField
               key={index}
@@ -58,7 +58,6 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
               color="primary"
               value={participant}
               onChange={(e) => handleInputChange(index, e.target.value)}
-              className="mt-2"
             />
           ))}
         </div>

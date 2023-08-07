@@ -56,7 +56,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
       <Typography variant="h4" className="mb-5">
         Add Expense
       </Typography>
-      <form onSubmit={handleSubmit} className="flex flex-col">
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-2">
         <TextField
           select
           label="Select Group"
@@ -64,7 +64,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
           color="primary"
           value={selectedGroupId || ""}
           onChange={(e) => setSelectedGroupId(e.target.value || null)}
-          className="mt-2"
+          
         >
           <MenuItem value="" disabled>
             Select a group
@@ -82,7 +82,6 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
           type="number"
           value={amount}
           onChange={(e) => setAmount(parseFloat(e.target.value))}
-          className="mt-2"
         />
         {selectedGroup && (
           <TextField
@@ -98,7 +97,6 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
                 ) || null
               )
             }
-            className="mt-2"
           >
             {selectedGroup.members.map((member) => (
               <MenuItem key={member.name} value={member.name}>
@@ -113,7 +111,6 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
           color="primary"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="mt-2"
         />
         <TextField
           label="Date"
@@ -122,7 +119,6 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          className="mt-2"
         />
         <div className="flex flex-row justify-between">
           <Button
