@@ -50,7 +50,7 @@ const UnsettledExpensesPopup: React.FC<UnsettledExpensesPopupProps> = ({
                   className="flex flex-row justify-between items-center my-2 font-bold"
                 >
                   {findExpenseDescription(expenseOwed.expenseId)}:{" "}
-                  {Math.abs(expenseOwed.amount)}$
+                  {Math.abs(expenseOwed.amount).toFixed(2)}$
                   <Button
                     onClick={() => onSettleExpense(participant, expenseOwed)}
                     variant="contained"

@@ -37,10 +37,10 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
 
   return (
     <div className="bg-white p-4 rounded-md shadow-md w-1/5">
-      <Typography variant="h4" className="mb-5">
+      <Typography variant="h4">
         Create New Group
       </Typography>
-      <form onSubmit={handleSubmit} className="flex flex-col">
+      <form onSubmit={handleSubmit} className="flex flex-col mt-2">
         <TextField
           label="Group Name"
           variant="outlined"
@@ -61,17 +61,25 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
             />
           ))}
         </div>
-        <Button
-          variant="text"
-          color="success"
-          type="button"
-          onClick={handleAddMemberField}
-          className="my-2"
-        >
-          Add Member
-        </Button>
+        <div className="my-2 flex justify-center">
+          <Button
+            variant="text"
+            color="success"
+            type="button"
+            fullWidth
+            onClick={handleAddMemberField}
+          >
+            Add Member
+          </Button>
+        </div>
+
         <div className="flex justify-between">
-          <Button variant="contained" color="success" className="bg-green-700 text-white" type="submit">
+          <Button
+            variant="contained"
+            color="success"
+            className="bg-green-700 text-white"
+            type="submit"
+          >
             Create Group
           </Button>
           <Button variant="outlined" color="error" onClick={onCancel}>
