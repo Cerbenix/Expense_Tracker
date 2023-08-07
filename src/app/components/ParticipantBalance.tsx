@@ -5,7 +5,7 @@ import UnsettledExpensesPopup from "./UnsettledExpensesPopup";
 interface ParticipantBalanceProps {
   participants: Participant[];
   expenses: Expense[];
-  onSettleExpense: (participant: Participant) => void;
+  onSettleExpense: (participant: Participant, expenseOwed: ExpenseOwed) => void;
 }
 
 function calculateTotalBalance(expensesOwed: ExpenseOwed[]): number {
@@ -35,21 +35,20 @@ const ParticipantBalance: React.FC<ParticipantBalanceProps> = ({
     setOpenUnsettledExpenses(false);
   };
 
-  const handleSettleExpense = (participant: Participant) => {
-    onSettleExpense(participant);
+  const handleSettleExpense = (participant: Participant, expenseOwed: ExpenseOwed) => {
+    onSettleExpense(participant, expenseOwed);
   };
 
   return (
-    <div className="flex flex-col p-2">
-      <Typography variant="h5">Group Balances</Typography>
+    <div className="flex flex-col p-4">
+      <Typography variant="h6">Group Balances</Typography>
 
       <ul className="space-y-2">
         {participants.map((participant) => {
           const totalBalance = calculateTotalBalance(participant.expensesOwed);
           const balanceColor =
-            totalBalance >= 0 ? "text-red-400" : "text-green-400";
-          const formattedBalance = Math.abs(totalBalance).toFixed(2);
-          const balanceText = totalBalance >= 0 ? "Owes" : "Gets back";
+            totalBalance === 0 ? "text-gray-400" : totalBalance >= 0 ? "text-red-400" : "text-green-400";
+          const balanceText = totalBalance === 0 ? "All settled" : totalBalance >= 0 ? "Owes" : "Gets back";
 
           return (
             <li
@@ -57,10 +56,10 @@ const ParticipantBalance: React.FC<ParticipantBalanceProps> = ({
               className="flex items-center cursor-pointer"
               onClick={() => handleParticipantClick(participant)}
             >
-              <div className="flex flex-col">
-                <span className="mr-2 font-bold">{participant.name}:</span>
+              <div className="flex flex-col ml-2">
+                <span className="font-bold">{participant.name}:</span>
                 <span className={balanceColor}>
-                  {balanceText}: {formattedBalance}$
+                  {balanceText} {totalBalance !== 0 && `${Math.abs(totalBalance).toFixed(2)}$`}
                 </span>
               </div>
             </li>

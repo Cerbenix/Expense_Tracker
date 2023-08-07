@@ -30,7 +30,6 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (selectedGroupId && selectedParticipant) {
-      // Find the selected group based on selectedGroupId
       const selectedGroup = groups.find(
         (group) => group.id === selectedGroupId
       );
@@ -53,7 +52,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
   };
 
   return (
-    <div className="bg-white p-4 rounded-md shadow-md">
+    <div className="bg-white p-6 rounded-md shadow-md w-1/5">
       <Typography variant="h4" className="mb-5">
         Add Expense
       </Typography>

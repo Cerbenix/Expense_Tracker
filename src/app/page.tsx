@@ -27,8 +27,81 @@ const MainPage: React.FC = () => {
     );
   };
 
-  const handleSettleExpense = (participant: Participant) => {
-    
+  const handleSettleExpense = (
+    participant: Participant,
+    expenseOwed: ExpenseOwed
+  ) => {
+    if (selectedGroup) {
+      const updatedParticipant: Participant = {
+        ...participant,
+        expensesOwed: participant.expensesOwed.map((expense) =>
+          expense.expenseId === expenseOwed.expenseId
+            ? { ...expense, settled: true }
+            : expense
+        ),
+      };
+
+      const expense = selectedGroup.expenses.find(
+        (expense) => expense.id === expenseOwed.expenseId
+      );
+
+      if (expense) {
+        const paidByParticipant = selectedGroup.members.find(
+          (member) => member.name === expense.paidBy
+        );
+
+        if (paidByParticipant) {
+          const updatedPaidByExpensesOwed = paidByParticipant.expensesOwed.map(
+            (expense) =>
+              expense.expenseId === expenseOwed.expenseId
+                ? {
+                    ...expense,
+                    amount: expense.amount + expenseOwed.amount,
+                    settled: expense.amount - expenseOwed.amount === 0,
+                  }
+                : expense
+          );
+
+          const updatedPaidByParticipant: Participant = {
+            ...paidByParticipant,
+            expensesOwed: updatedPaidByExpensesOwed,
+          };
+
+          const updatedParticipants = selectedGroup.members.map((member) =>
+            member.name === paidByParticipant.name
+              ? updatedPaidByParticipant
+              : member
+          );
+
+          const isExpenseSettled =
+            updatedPaidByExpensesOwed.find(
+              (expense) => expense.expenseId === expenseOwed.expenseId
+            )?.amount === 0;
+
+          const updatedGroup: Group = {
+            ...selectedGroup,
+            members: updatedParticipants.map((member) =>
+              member.name === updatedParticipant.name
+                ? updatedParticipant
+                : member
+            ),
+            expenses: selectedGroup.expenses.map((expense) =>
+              expense.id === expenseOwed.expenseId
+                ? { ...expense, settled: isExpenseSettled }
+                : expense
+            ),
+          };
+
+          const updatedGroups = groups.map((group) =>
+            group.id === updatedGroup.id ? updatedGroup : group
+          );
+
+          setGroups(updatedGroups);
+          setSelectedGroup(updatedGroup);
+          setSelectedExpenses([...updatedGroup.expenses]);
+        }
+      }
+    }
   };
 
   const handleAddExpense = () => {
@@ -113,7 +186,7 @@ const MainPage: React.FC = () => {
   return (
     <div className="flex flex-col">
       <Header user={user} onUserChange={setUser} />
-      <div className="flex flex-row w-2/3 self-center h-[90vh]">
+      <div className="flex flex-row w-2/3 self-center h-[92vh]">
         <div className="w-1/3">
           <GroupList
             groups={groups}
@@ -121,7 +194,7 @@ const MainPage: React.FC = () => {
             onCreateGroup={handleCreateGroup}
           />
         </div>
-        <div className="w-1/2 border-[1px] shadow-lg">
+        <div className="w-1/2 border-x-[1px] border-b-[1px] border-gray-300 shadow-2xl">
           <div className="flex flex-row justify-between bg-gray-50 px-5 py-2 border-b-[1px] items-center">
             <Typography variant="h5">{selectedGroup?.name}</Typography>
             <Button variant="outlined" onClick={handleAddExpense}>
@@ -137,7 +210,11 @@ const MainPage: React.FC = () => {
         </div>
         <div className="w-1/3">
           {selectedGroup && (
-            <ParticipantBalance participants={selectedGroup.members} expenses={selectedGroup.expenses} onSettleExpense={handleSettleExpense}/>
+            <ParticipantBalance
+              participants={selectedGroup.members}
+              expenses={selectedGroup.expenses}
+              onSettleExpense={handleSettleExpense}
+            />
           )}
         </div>
         {showExpenseForm && (

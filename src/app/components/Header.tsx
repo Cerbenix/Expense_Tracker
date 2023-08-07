@@ -24,11 +24,11 @@ const Header: React.FC<HeaderProps> = ({ user, onUserChange }) => {
   };
 
   return (
-    <div className="bg-gray-200 text-black py-2 px-5 flex flex-row justify-between items-center">
+    <div className="bg-gray-200 text-black py-2 px-5 flex flex-row justify-between items-center h-[72px]">
       <Typography variant="h4">Expense Tracker</Typography>
 
       {formSubmitted ? (
-        <Typography variant="h6">Hello, {userName}!</Typography>
+        <Typography variant="h5">Hello, {userName}!</Typography>
       ) : (
         <form className='flex flex-row' onSubmit={handleUserNameSubmit}>
           <TextField

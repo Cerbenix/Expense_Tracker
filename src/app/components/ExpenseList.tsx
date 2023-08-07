@@ -12,35 +12,53 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
   onExpenseSelect,
   user,
 }) => {
+  const formatDate = (date: string) => {
+    return new Date(date).toLocaleDateString(undefined, {
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   return (
     <div className="flex flex-col">
       {expenses.map((expense) => (
-        <div key={expense.id} onClick={() => onExpenseSelect(expense.id)}>
+        <div
+          key={expense.id}
+          onClick={() => onExpenseSelect(expense.id)}
+          className="cursor-pointer"
+        >
           <div className="flex flex-row justify-between bg-gray-50 border-b-[1px] p-2">
-            <div className="flex flex-row items-center">
-              <p>{expense.date}</p>
-              <p className="mx-2">{expense.description}</p>
+            <div className="w-1/2 mx-2">
+              <p className="text-xs text-gray-400">{formatDate(expense.date)}</p>
+              <p className="font-bold">{expense.description}</p>
             </div>
 
             {user && (
-              <div className="flex flex-col ">
-                <p>
-                  {expense.paidBy} paid: {expense.amount.toFixed(2)}$
+              <div className="flex flex-col w-1/2">
+                <p className="text-gray-400">
+                  {expense.paidBy} paid: <span className="font-bold text-black">{expense.amount.toFixed(2)}$</span>
                 </p>
 
                 {expense.paidBy === user.name ? (
-                  <p>
+                  <p className="text-gray-400">
                     You lent:
-                    <span className="text-green-400">
+                    <span className="text-green-400 font-bold">
                       {" "}
-                      {(expense.amount - expense.amount / expense.participants.length).toFixed(2)}$
+                      {(
+                        expense.amount -
+                        expense.amount / expense.participants.length
+                      ).toFixed(2)}
+                      $
                     </span>
                   </p>
                 ) : (
-                  <p>
+                  <p className="text-gray-400">
                     You owe {expense.paidBy}{" "}
-                    <span className="text-red-400">
-                      {(expense.amount / expense.participants.length).toFixed(2)}$
+                    <span className="text-red-400 font-bold">
+                      {(expense.amount / expense.participants.length).toFixed(
+                        2
+                      )}
+                      $
                     </span>
                   </p>
                 )}
@@ -53,7 +71,8 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
               <Typography variant="h6">Participants:</Typography>
               {expense.participants.map((participant) => (
                 <p key={participant.name}>
-                  {participant.name} owes {(expense.amount / expense.participants.length).toFixed(2)}$
+                  {participant.name} owes{" "}
+                  {(expense.amount / expense.participants.length).toFixed(2)}$
                 </p>
               ))}
             </div>

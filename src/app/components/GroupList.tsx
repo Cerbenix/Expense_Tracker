@@ -22,7 +22,7 @@ const GroupList: React.FC<GroupListProps> = ({
 
   return (
     <div>
-      <div className="flex flex-row justify-between p-2">
+      <div className="flex flex-row justify-between p-4">
       
       <Typography variant="h6">
         Groups
@@ -33,9 +33,9 @@ const GroupList: React.FC<GroupListProps> = ({
       </Button>
       </div>
       
-      <ul className="p-2">
+      <ul className="px-4 space-y-1">
         {groups.map((group) => (
-          <li key={group.id} onClick={() => onGroupSelect(group.id)}>
+          <li key={group.id} onClick={() => onGroupSelect(group.id)} className="font-bold border-[1px] p-2 cursor-pointer">
             {group.name}
           </li>
         ))}

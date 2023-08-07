@@ -1,4 +1,4 @@
-import { Button, TextField, Typography, Container } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 
 interface CreateGroupFormProps {
@@ -36,7 +36,7 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
   };
 
   return (
-    <div className="bg-white p-4 rounded-md shadow-md">
+    <div className="bg-white p-4 rounded-md shadow-md w-1/5">
       <Typography variant="h4" className="mb-5">
         Create New Group
       </Typography>
