@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UnsettledExpensesPopup from "./UnsettledExpensesPopup";
 
 interface ParticipantBalanceProps {
@@ -25,6 +25,16 @@ const ParticipantBalance: React.FC<ParticipantBalanceProps> = ({
 }) => {
   const [selectedParticipant, setSelectedParticipant] = useState<Participant>(participants[0]);
   const [openUnsettledExpenses, setOpenUnsettledExpenses] = useState(false);
+
+  useEffect(() => {
+    const updatedSelectedParticipant = participants.find(
+      (participant) => participant.name === selectedParticipant.name
+    );
+    if(updatedSelectedParticipant){
+      setSelectedParticipant(updatedSelectedParticipant);
+    }
+  }, [participants]);
+      
 
   const handleParticipantClick = (participant: Participant) => {
     setSelectedParticipant(participant);

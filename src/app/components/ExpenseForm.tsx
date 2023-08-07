@@ -47,6 +47,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
         };
 
         onSubmit(newExpense);
+        console.log(newExpense)
       }
     }
   };

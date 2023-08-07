@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog, Button, Typography } from "@mui/material";
 
 interface UnsettledExpensesPopupProps {
@@ -21,14 +21,23 @@ const UnsettledExpensesPopup: React.FC<UnsettledExpensesPopupProps> = ({
     return expense ? expense.description : "";
   };
 
-  const unsettledExpensesOwed = participant.expensesOwed.filter(
-    (expenseOwed) => !expenseOwed.settled && expenseOwed.amount > 0
+  const [unsettledExpensesOwed, setUnsettledExpensesOwed] = useState<ExpenseOwed[]>(
+    []
   );
+
+  useEffect(() => {
+    const updatedUnsettledExpenses = participant.expensesOwed
+      .filter((expenseOwed) => !expenseOwed.settled && expenseOwed.amount > 0)
+      .map((expenseOwed) => ({ ...expenseOwed }));
+    setUnsettledExpensesOwed(updatedUnsettledExpenses);
+  }, [participant]);
 
   return (
     <Dialog open={open} onClose={onClose}>
       <div className="p-4">
-        <Typography variant="h4" className="font-bold">{participant.name}</Typography>
+        <Typography variant="h4" className="font-bold">
+          {participant.name}
+        </Typography>
         <div>
           {unsettledExpensesOwed.length > 0 ? (
             <ul>

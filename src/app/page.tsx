@@ -186,7 +186,7 @@ const MainPage: React.FC = () => {
   return (
     <div className="flex flex-col">
       <Header user={user} onUserChange={setUser} />
-      <div className="flex flex-row w-2/3 self-center h-[92vh]">
+      <div className="flex flex-row w-2/3 self-center min-h-[92vh]">
         <div className="w-1/3">
           <GroupList
             groups={groups}
@@ -206,6 +206,7 @@ const MainPage: React.FC = () => {
             expenses={selectedExpenses}
             onExpenseSelect={handleExpenseSelect}
             user={user}
+            group={selectedGroup}
           />
         </div>
         <div className="w-1/3">

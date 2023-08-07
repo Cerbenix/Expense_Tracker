@@ -1,16 +1,19 @@
 import { Typography } from "@mui/material";
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import React from "react";
 
 interface ExpenseListProps {
   expenses: Expense[];
   onExpenseSelect: (expenseId: string) => void;
   user: Participant | null;
+  group: Group | null;
 }
 
 const ExpenseList: React.FC<ExpenseListProps> = ({
   expenses,
   onExpenseSelect,
   user,
+  group,
 }) => {
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString(undefined, {
@@ -25,45 +28,75 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
         <div
           key={expense.id}
           onClick={() => onExpenseSelect(expense.id)}
-          className="cursor-pointer"
+          className={`cursor-pointer ${
+            expense.settled ? "bg-green-100" : "bg-red-50"
+          } border-b-[1px] p-2`}
         >
-          <div className="flex flex-row justify-between bg-gray-50 border-b-[1px] p-2">
-            <div className="w-1/2 mx-2">
-              <p className="text-xs text-gray-400">{formatDate(expense.date)}</p>
-              <p className="font-bold">{expense.description}</p>
-            </div>
-
-            {user && (
-              <div className="flex flex-col w-1/2">
-                <p className="text-gray-400">
-                  {expense.paidBy} paid: <span className="font-bold text-black">{expense.amount.toFixed(2)}$</span>
+          <div>
+            <div className="flex flex-row justify-between">
+              <div className="w-1/2 mx-2">
+                <p className="text-xs text-gray-400">
+                  {formatDate(expense.date)}
                 </p>
-
-                {expense.paidBy === user.name ? (
-                  <p className="text-gray-400">
-                    You lent:
-                    <span className="text-green-400 font-bold">
-                      {" "}
-                      {(
-                        expense.amount -
-                        expense.amount / expense.participants.length
-                      ).toFixed(2)}
-                      $
-                    </span>
-                  </p>
-                ) : (
-                  <p className="text-gray-400">
-                    You owe {expense.paidBy}{" "}
-                    <span className="text-red-400 font-bold">
-                      {(expense.amount / expense.participants.length).toFixed(
-                        2
-                      )}
-                      $
-                    </span>
-                  </p>
-                )}
+                <p className="font-bold">{expense.description}</p>
               </div>
-            )}
+
+              {user && (
+                <div className="flex flex-col w-1/2">
+                  <p className="text-gray-400">
+                    {expense.paidBy} paid:{" "}
+                    <span className="font-bold text-black">
+                      {expense.amount.toFixed(2)}$
+                    </span>
+                  </p>
+
+                  {expense.paidBy === user.name ? (
+                    <p className="text-gray-400">
+                      You lent:
+                      <span className="text-green-400 font-bold">
+                        {" "}
+                        {(
+                          expense.amount -
+                          expense.amount / expense.participants.length
+                        ).toFixed(2)}
+                        $
+                      </span>
+                    </p>
+                  ) : (
+                    <p className="text-gray-400">
+                      You owe {expense.paidBy}{" "}
+                      <span className="text-red-400 font-bold">
+                        {(expense.amount / expense.participants.length).toFixed(
+                          2
+                        )}
+                        $
+                      </span>
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+            <div>
+              {group?.members.map((member) => {
+                const settledExpensesOwed = member.expensesOwed.filter(
+                  (expenseOwed) =>
+                    expenseOwed.settled && expenseOwed.expenseId === expense.id
+                );
+
+                return (
+                  
+                  <p key={member.name} className="text-green-600 ">
+                  {settledExpensesOwed.map((expenseOwed) => (
+                    <span key={expenseOwed.expenseId}>
+                      <MonetizationOnIcon /> {member.name} sent:{" "}
+                      {expenseOwed.amount}$
+                    </span>
+                  ))}
+                </p>
+                  
+                );
+              })}
+            </div>
           </div>
 
           {expense.expanded && (
