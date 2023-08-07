@@ -64,7 +64,7 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
         </div>
         <Button
           variant="text"
-          color="primary"
+          color="success"
           type="button"
           onClick={handleAddMemberField}
           className="my-2"
@@ -72,7 +72,7 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
           Add Member
         </Button>
         <div className="flex justify-between">
-          <Button variant="outlined" color="primary" type="submit">
+          <Button variant="contained" color="success" className="bg-green-700 text-white" type="submit">
             Create Group
           </Button>
           <Button variant="outlined" color="error" onClick={onCancel}>

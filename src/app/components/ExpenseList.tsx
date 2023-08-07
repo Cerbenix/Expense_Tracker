@@ -1,5 +1,5 @@
-import { Typography } from "@mui/material";
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import { Button, Typography } from "@mui/material";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import React from "react";
 
 interface ExpenseListProps {
@@ -7,6 +7,7 @@ interface ExpenseListProps {
   onExpenseSelect: (expenseId: string) => void;
   user: Participant | null;
   group: Group | null;
+  onAddExpense: () => void;
 }
 
 const ExpenseList: React.FC<ExpenseListProps> = ({
@@ -14,6 +15,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
   onExpenseSelect,
   user,
   group,
+  onAddExpense
 }) => {
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString(undefined, {
@@ -24,6 +26,18 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
 
   return (
     <div className="flex flex-col">
+      <div className="flex flex-row justify-between bg-gray-50 px-5 py-4 border-b-[1px] items-center">
+            <Typography variant="h5">{group?.name}</Typography>
+
+            <Button
+              variant="contained"
+              color="warning"
+              onClick={() => onAddExpense()}
+              className="bg-orange-500 text-white"
+            >
+              Add Expense
+            </Button>
+          </div>
       {expenses.map((expense) => (
         <div
           key={expense.id}
@@ -84,28 +98,30 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
                 );
 
                 return (
-                  
                   <p key={member.name} className="text-green-600 ">
-                  {settledExpensesOwed.map((expenseOwed) => (
-                    <span key={expenseOwed.expenseId}>
-                      <MonetizationOnIcon /> {member.name} sent:{" "}
-                      {expenseOwed.amount}$
-                    </span>
-                  ))}
-                </p>
-                  
+                    {settledExpensesOwed.map((expenseOwed) => (
+                      <span key={expenseOwed.expenseId}>
+                        <MonetizationOnIcon /> {member.name} sent:{" "}
+                        {expenseOwed.amount}$
+                      </span>
+                    ))}
+                  </p>
                 );
               })}
             </div>
           </div>
 
           {expense.expanded && (
-            <div className="flex flex-col p-2">
+            <div className="flex flex-col p-2 mt-2 border-t-[1px]">
               <Typography variant="h6">Participants:</Typography>
               {expense.participants.map((participant) => (
                 <p key={participant.name}>
-                  {participant.name} owes{" "}
-                  {(expense.amount / expense.participants.length).toFixed(2)}$
+                  {participant.name}{" "}
+                  {participant.name === expense.paidBy
+                    ? `paid: ${(expense.amount).toFixed(2)}$`
+                    : `owes ${(
+                        expense.amount / expense.participants.length
+                      ).toFixed(2)}$`}
                 </p>
               ))}
             </div>

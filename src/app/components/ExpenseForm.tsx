@@ -6,6 +6,7 @@ interface ExpenseFormProps {
   selectedGroup: Group | null;
   onClose: () => void;
   onSubmit: (expense: Expense) => void;
+  user: Participant | null;
 }
 
 const ExpenseForm: React.FC<ExpenseFormProps> = ({
@@ -13,15 +14,14 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
   selectedGroup,
   onClose,
   onSubmit,
+  user,
 }) => {
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(
     selectedGroup ? selectedGroup.id : null
   );
   const [amount, setAmount] = useState<number>(0);
   const [selectedParticipant, setSelectedParticipant] =
-    useState<Participant | null>(
-      selectedGroup ? selectedGroup.members[0] : null
-    );
+    useState<Participant | null>(user || null);
   const [date, setDate] = useState<string>(
     new Date().toISOString().slice(0, 10)
   );
@@ -47,7 +47,6 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
         };
 
         onSubmit(newExpense);
-        console.log(newExpense)
       }
     }
   };
@@ -127,10 +126,10 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
         />
         <div className="flex flex-row justify-between">
           <Button
-            variant="outlined"
-            color="primary"
+            variant="contained"
+            color="success"
             type="submit"
-            className="my-2"
+            className="my-2 bg-green-700 text-white"
           >
             Submit
           </Button>

@@ -173,6 +173,13 @@ const MainPage: React.FC = () => {
     setSelectedExpenses([]);
   };
 
+  const handleGroupDelete = (groupId: string) => {
+    const updatedGroups = groups.filter((group) => group.id !== groupId);
+    setGroups(updatedGroups);
+    setSelectedGroup(null);
+    setSelectedExpenses([]);
+  };
+
   const handleExpenseSelect = (expenseId: string) => {
     setSelectedExpenses((prevExpenses) => {
       return prevExpenses.map((expense) =>
@@ -192,22 +199,27 @@ const MainPage: React.FC = () => {
             groups={groups}
             onGroupSelect={handleGroupSelect}
             onCreateGroup={handleCreateGroup}
+            onDeleteGroup={handleGroupDelete}
           />
         </div>
         <div className="w-1/2 border-x-[1px] border-b-[1px] border-gray-300 shadow-2xl">
-          <div className="flex flex-row justify-between bg-gray-50 px-5 py-2 border-b-[1px] items-center">
-            <Typography variant="h5">{selectedGroup?.name}</Typography>
-            <Button variant="outlined" onClick={handleAddExpense}>
-              Add Expense
-            </Button>
-          </div>
+          
 
-          <ExpenseList
-            expenses={selectedExpenses}
-            onExpenseSelect={handleExpenseSelect}
-            user={user}
-            group={selectedGroup}
-          />
+          {selectedGroup === null? (
+            <div className="flex justify-center">
+              <Typography variant="body1" className="p-4 text-gray-400">
+                No expenses to show. Create a group and add an expense.
+              </Typography>
+            </div>
+          ) : (
+            <ExpenseList
+              expenses={selectedExpenses}
+              onExpenseSelect={handleExpenseSelect}
+              user={user}
+              group={selectedGroup}
+              onAddExpense={handleAddExpense}
+            />
+          )}
         </div>
         <div className="w-1/3">
           {selectedGroup && (
@@ -225,6 +237,7 @@ const MainPage: React.FC = () => {
               selectedGroup={selectedGroup}
               onClose={() => setShowExpenseForm(false)}
               onSubmit={handleExpenseFormSubmit}
+              user={user}
             />
           </div>
         )}

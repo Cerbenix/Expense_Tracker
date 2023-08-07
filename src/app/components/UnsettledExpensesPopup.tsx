@@ -34,9 +34,12 @@ const UnsettledExpensesPopup: React.FC<UnsettledExpensesPopupProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <div className="p-4">
+      <div className="p-4 w-[400px]">
         <Typography variant="h4" className="font-bold">
           {participant.name}
+        </Typography>
+        <Typography variant="h6" className="font-bold">
+          Unpaid expenses:
         </Typography>
         <div>
           {unsettledExpensesOwed.length > 0 ? (
@@ -44,14 +47,15 @@ const UnsettledExpensesPopup: React.FC<UnsettledExpensesPopupProps> = ({
               {unsettledExpensesOwed.map((expenseOwed) => (
                 <li
                   key={expenseOwed.expenseId}
-                  className="flex flex-row justify-between items-center my-2"
+                  className="flex flex-row justify-between items-center my-2 font-bold"
                 >
                   {findExpenseDescription(expenseOwed.expenseId)}:{" "}
                   {Math.abs(expenseOwed.amount)}$
                   <Button
                     onClick={() => onSettleExpense(participant, expenseOwed)}
-                    variant="outlined"
-                    className="ml-4"
+                    variant="contained"
+                    color="success"
+                    className="ml-4 bg-green-700 text-white"
                   >
                     Settle
                   </Button>
