@@ -200,6 +200,7 @@ const MainPage: React.FC = () => {
             onGroupSelect={handleGroupSelect}
             onCreateGroup={handleCreateGroup}
             onDeleteGroup={handleGroupDelete}
+            user={user}
           />
         </div>
         <div className="w-1/2 border-x-[1px] border-b-[1px] border-gray-300 shadow-2xl">

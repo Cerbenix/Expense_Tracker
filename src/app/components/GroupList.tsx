@@ -8,6 +8,7 @@ interface GroupListProps {
   onGroupSelect: (groupId: string) => void;
   onCreateGroup: (groupName: string, members: string[]) => void;
   onDeleteGroup: (groupId: string) => void;
+  user: Participant | null;
 }
 
 const GroupList: React.FC<GroupListProps> = ({
@@ -15,6 +16,7 @@ const GroupList: React.FC<GroupListProps> = ({
   onGroupSelect,
   onCreateGroup,
   onDeleteGroup,
+  user
 }) => {
   const [showCreateGroupForm, setShowCreateGroupForm] = useState(false);
 
@@ -30,7 +32,13 @@ const GroupList: React.FC<GroupListProps> = ({
         <Button
           variant="contained"
           color="success"
-          onClick={() => setShowCreateGroupForm(true)}
+          onClick={() => {
+            if (!user) {
+              alert("Please enter your name before creating a group.");
+            } else {
+              setShowCreateGroupForm(true);
+            }
+          }}
           className="bg-green-700 text-white"
         >
           Add Group

@@ -56,7 +56,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
       <Typography variant="h4" className="mb-5">
         Add Expense
       </Typography>
-      <form onSubmit={handleSubmit} className="flex flex-col space-y-2">
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
         <TextField
           select
           label="Select Group"
